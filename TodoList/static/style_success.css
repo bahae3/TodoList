@@ -1,0 +1,57 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f2f2f2;
+  overflow-x: hidden;
+}
+
+h1.success-h1 {
+    text-align: center;
+    margin-top: 30px;
+    color: #333
+}
+
+.success-span {
+    color: #333888;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+    text-align: center;
+    margin-top: 20px;
+}
+
+li, .success-p {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.success-update,
+.success-delete {
+    margin: 5px auto;
+    padding: 15px 25px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    width: 140px;
+    text-align: center;
+}
+
+/* Hover effect */
+.success-update:hover,
+.success-delete:hover{
+    background-color: #0056b3;
+}
+
+/* Active effect (when clicked) */
+.success-update:active,
+.success-delete:active {
+    background-color: #003a80;
+}

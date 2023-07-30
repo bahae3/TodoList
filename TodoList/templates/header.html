@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="static/style_login.css">
+    <link rel="stylesheet" href="static/style_home.css">
+    <link rel="stylesheet" href="static/style_signup.css">
+    <link rel="stylesheet" href="static/style_todo.css">
+    <link rel="stylesheet" href="static/style_success.css">
+    <link rel="stylesheet" href="static/style_contact.css">
+    <link rel="stylesheet" href="static/style_aboutus.css">
+    <link rel="icon" href="{{ url_for('static', filename='todo.png') }}">
+
+    <script src="https://kit.fontawesome.com/a7aad111ea.js" crossorigin="anonymous"></script>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<div class="navbar">
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('success') }}">Your List</a>
+    <a href="{{ url_for('aboutus') }}">About Us</a>
+    <a href="{{ url_for('contact') }}">Contact Us</a>
+    <a href="{{ url_for('logout') }}">Log Out</a>
+    {% else %}
+    <a href="{{ url_for('home') }}">Todo List</a>
+    <a href="{{ url_for('signup') }}">Sign Up</a>
+    <a href="{{ url_for('login') }}">Log In</a>
+    <a href="{{ url_for('aboutus') }}">About Us</a>
+    {% endif %}
+</div>
+{% block body %}
+{% endblock %}

@@ -1,0 +1,28 @@
+.login-prompt, .login-link {
+  text-align: center;
+}
+
+.login-prompt-or{
+    text-align: center;
+    font-size: 23px;
+    margin: 10px 0;
+}
+
+.login-link {
+  display: block;
+  margin-top: 5px;
+}
+
+.login-link a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+.signup-title {
+  text-align: center;
+  margin: 0 0 20px;
+}

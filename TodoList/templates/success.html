@@ -1,0 +1,28 @@
+{% extends 'header.html' %}
+{% block title %}Your list{% endblock %}
+{% block body %}
+<h1 class="success-h1">Here is your TODO List for today: <span class="success-span">{{ date }}</span></h1>
+<hr>
+{% if list %}
+<ul>
+<!--
+I need some code to make the check ✔ for the items that are done, and the ❌ for items that aren't done yet
+Can be done with python or JavaScript
+The user who will check the item if it is done, and if not, it will be the cross by default
+-->
+    {% for item in list %}
+    <li>{{ item }} ✔</li>
+    {% endfor %}
+</ul>
+<hr>
+<a class="success-update" href="{{ url_for('update', user_id_list=current_user.id) }}">Update the new list</a>
+<a class="success-delete" href="{{ url_for('delete', user_id_list=current_user.id) }}">Delete your list</a>
+{% else %}
+<p class="success-p">Your list is empty. Update it.</p>
+<hr>
+<a class="success-delete" href="{{ url_for('todo') }}">Create a new list</a>
+{% endif %}
+
+
+{% endblock %}
+{% include 'footer.html' %}
