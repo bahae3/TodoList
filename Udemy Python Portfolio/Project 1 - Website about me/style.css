@@ -1,0 +1,173 @@
+body {
+    margin: 0;
+    background-color: #F9F9F9;
+}
+
+.nav{
+    margin: 0;
+    background-color: #FA5F55;
+    height: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo{
+    width: fit-content;
+    margin: 0;
+    padding: 1rem 0 1rem 4rem;
+    font-family: 'Pixelify Sans', cursive;
+    font-size: 6rem;
+}
+
+.list{
+    width: fit-content;
+    margin: 0;
+    padding: 1rem 1rem 1rem 0;
+    display: flex;
+    align-items: center;
+    list-style: none;
+}
+
+.item{
+    padding-right: 5rem;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 2rem;
+}
+
+.item-link{
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.2s ease-in;
+}
+
+.item-link:hover{
+    color: #E8E4E4;
+}
+
+.content{
+    margin: 5rem 9rem;
+}
+
+hr{
+    margin: 3.5rem;
+    border: 0;
+    height: 0.15rem;
+    background-color: #FA5F55;
+    /* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); */
+}
+
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.fields{
+    width: 45%;
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.fields-photo{
+    width: 9rem;
+    height: auto;
+    transition: filter 0.3s ease;
+}
+
+.fields-photo:hover{
+    fill: #FA5F55;
+}
+
+.fields-description{
+    font-size: 1.4rem;
+    margin-top: 1.2rem;
+    text-align: center;
+}
+
+.subtitle {
+    font-family: 'PT Serif Caption', serif;
+    font-size: 2.6rem;
+    color: #FA5F55;
+    text-decoration: underline;
+}
+
+p{
+    font-family: 'Ubuntu', sans-serif;
+    line-height: 2;
+    font-size: 1.2rem;
+    text-align: justify;
+    color: #898888;
+}
+
+.contact-icons{
+    margin-top: 4rem;
+    margin-bottom: 9rem;
+    display: flex;
+    justify-content: center;
+}
+
+.contact-link {
+    margin: 0 1.5rem;
+}
+
+.fa-brands{
+    color: #000;
+    font-size: 4rem;
+    transition: color 0.3s ease;
+}
+
+.fa-square-facebook:hover{
+    color: #4267B2;
+}
+.fa-square-instagram:hover {
+    color: #E1306C;
+}
+.fa-square-x-twitter:hover {
+    color: #657786;
+}
+.fa-linkedin:hover {
+    color: #0072b1;
+}
+
+.up{
+    width: fit-content;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    color: #FA5F55;
+    font-size: 5rem;
+    text-decoration: none;
+    transition: color 0.5s ease;
+}
+
+.up:hover{
+    color: #FA5F9F;
+}
+
+.copyright {
+    background-color: #FA5F55;
+    height: 12rem;
+    text-align: center;
+    padding: 3rem 0;
+    color: #fff;
+}
+
+.cr{
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 2.4rem;
+    margin-bottom: 0.6rem;
+}
+
+.myname{
+    font-family: 'Pixelify Sans', cursive;
+    font-size: 2.8rem;
+    color: #000;
+}
+
+.ct{
+    font-family: 'Source Code Pro', monospace;
+    font-size: 1.5rem;
+    margin-top: 0.6rem;
+}
