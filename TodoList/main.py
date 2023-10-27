@@ -1,6 +1,7 @@
-from flask import Flask, render_template, redirect, url_for, flash
+from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
+from sqlalchemy import Integer, String
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 from forms import TodoListForm, SignupForm, LoginForm, ContactForm
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 from datetime import datetime
@@ -23,31 +24,32 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one()
 
 
 # Creating users table
 class User(db.Model, UserMixin):
     __tablename__ = "user"
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), nullable=False, unique=True)
-    password = db.Column(db.String(255), nullable=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    username: Mapped[str] = mapped_column(String, nullable=False)
+    email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
+    password: Mapped[str] = mapped_column(String, nullable=False)
     lists = relationship("TodoList")
 
 
 # Creating To do List table
 class TodoList(db.Model):
     __tablename__ = "list"
-    id = db.Column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user_list1 = db.Column(db.String(255), nullable=False)
-    user_list2 = db.Column(db.String(255), nullable=False)
-    user_list3 = db.Column(db.String(255), nullable=False)
-    user_list4 = db.Column(db.String(255), nullable=False)
+    user_list1: Mapped[str] = mapped_column(String, nullable=False)
+    user_list2: Mapped[str] = mapped_column(String, nullable=False)
+    user_list3: Mapped[str] = mapped_column(String, nullable=False)
+    user_list4: Mapped[str] = mapped_column(String, nullable=False)
 
 
-db.create_all()
+with app.app_context():
+    db.create_all()
 
 date = datetime.now()
 
@@ -60,11 +62,12 @@ def home():
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
     form = SignupForm()
-    if form.validate_on_submit():
+    # if form.validate_on_submit():
+    if request.method == "POST":
         new_user = User(
-            username=form.data.get('username'),
-            email=form.data.get('email'),
-            password=form.data.get('password')
+            username=request.form['username'],
+            email=request.form['email'],
+            password=request.form['password']
         )
         db.session.add(new_user)
         db.session.commit()
@@ -75,10 +78,13 @@ def signup():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if form.validate_on_submit():
-        email = form.data.get("email")
-        password = form.data.get("password")
-        existing_user = User.query.filter_by(email=email).first()
+    # if form.validate_on_submit():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+        # Changed this 👇
+        # existing_user = User.query.filter_by(email=email).first()
+        existing_user = db.session.execute(db.select(User).filter_by(email=email)).scalar_one()
         if existing_user:
             if existing_user.password == password:
                 login_user(existing_user)
@@ -95,12 +101,14 @@ def login():
 @app.route("/todo", methods=['GET', 'POST'])
 @login_required
 def todo():
-    user_list_db = TodoList.query.filter_by(user_id=current_user.id).first()
+    # user_list_db = TodoList.query.filter_by(user_id=current_user.id).first()
+    user_list_db = db.session.execute(db.select(TodoList).filter_by(user_id=current_user)).scalar_one()
     if user_list_db:
         return redirect(url_for("success"))
     form = TodoListForm()
-    if form.validate_on_submit():
-        user_list = form.data.get("todo_list")
+    # if form.validate_on_submit():
+    if request.method == "POST":
+        user_list = request.form["todo_list"]
         user_list_split = user_list.split(", ")
         all_the_list = []
         for i in user_list_split:
@@ -121,7 +129,8 @@ def todo():
 @app.route("/success")
 @login_required
 def success():
-    all_of_the_list = TodoList.query.filter_by(user_id=current_user.id).first()
+    all_of_the_list = db.session.execute(db.select(TodoList).filter_by(user_id=current_user)).scalar_one()
+    # all_of_the_list = TodoList.query.filter_by(user_id=current_user.id).first()
     if not all_of_the_list:
         listed_todo_items = []
     else:
@@ -135,7 +144,8 @@ def success():
 
 @app.route("/update/<int:user_id_list>", methods=['GET', 'POST'])
 def update(user_id_list):
-    list_to_delete = TodoList.query.filter_by(user_id=user_id_list).first()
+    list_to_delete = db.session.execute(db.select(TodoList).filter_by(user_id=user_id_list)).scalar_one()
+    # list_to_delete = TodoList.query.filter_by(user_id=user_id_list).first()
     db.session.delete(list_to_delete)
     db.session.commit()
     return redirect(url_for("todo"))
@@ -143,7 +153,8 @@ def update(user_id_list):
 
 @app.route("/delete/<int:user_id_list>", methods=['GET', 'POST'])
 def delete(user_id_list):
-    list_to_delete = TodoList.query.filter_by(user_id=user_id_list).first()
+    list_to_delete = db.session.execute(db.select(TodoList).filter_by(user_id=user_id_list)).scalar_one()
+    # list_to_delete = TodoList.query.filter_by(user_id=user_id_list).first()
     db.session.delete(list_to_delete)
     db.session.commit()
     return redirect(url_for("success"))
@@ -156,10 +167,10 @@ def contact():
         the_message = form.data.get("message")
         with smtplib.SMTP("smtp.gmail.com", 587) as connection:
             connection.starttls()
-            connection.login(EMAIL, PASSWORD)
+            connection.login("bahaeassaoui23@gmail.com", "ufyd prcu mgwk ezka")
             connection.sendmail(
-                from_addr=EMAIL,
-                to_addrs=EMAIL_REC,
+                from_addr="bahaeassaoui23@gmail.com",
+                to_addrs="bahaeassaoui23@gmail.com",
                 msg=f"Subject:Message from {current_user.email}\n\n{the_message}"
             )
         return redirect(url_for("success"))
@@ -179,5 +190,3 @@ def logout():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-# Added a testing comment
