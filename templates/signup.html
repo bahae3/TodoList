@@ -1,0 +1,27 @@
+{% extends 'header.html' %}
+{% block title %}Sign In{% endblock %}
+{% block body %}
+<p class="login-prompt">You should sign in first. Already have an account?</p>
+<div class="login-link"><a href="{{ url_for('login') }}" >Login here</a></div>
+<p class="login-prompt-or">or</p>
+<h1 class="signup-title">Sign Up</h1>
+<form action="{{ url_for('signup') }}" method="post">
+    {{ form.csrf_token }}
+    <div>
+        <label>{{ form.username.label }}</label>
+        {{ form.username() }}
+    </div>
+    <div>
+        <label>{{ form.email.label }}</label>
+        {{ form.email() }}
+    </div>
+    <div>
+        <label>{{ form.password.label }}</label>
+        {{ form.password() }}
+    </div>
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+{% endblock %}
+{% include 'footer.html' %}

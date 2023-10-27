@@ -1,0 +1,18 @@
+{% extends 'header.html' %}
+{% block title %}Todo List{% endblock %}
+{% block body %}
+<h1 class="todo-title">Type your TODO List <em>(max. 4)</em></h1>
+<p class="todo-p">It should be comma separated <em class="todo-em">(e.g. eat breakfast, go for a walk, go to gym)</em>
+</p>
+<form method="post" action="{{ url_for('todo') }}">
+    {{ form.csrf_token }}
+    <div>
+        <label>{{ form.todo_list.label }}</label>
+        {{ form.todo_list() }}
+    </div>
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+{% endblock %}
+{% include 'footer.html' %}

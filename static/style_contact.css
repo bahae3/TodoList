@@ -1,0 +1,17 @@
+.title-contact{
+    text-align: center;
+    margin: 30px 0 40px;
+}
+
+.label-contact{
+    text-align: center;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.textarea-contact {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

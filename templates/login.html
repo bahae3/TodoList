@@ -1,0 +1,29 @@
+{% extends 'header.html' %}
+{% block title %}Log In{% endblock %}
+{% block body %}
+<h1 class="login-title">Log In</h1>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<em class="flash-message">{{ message }}</em>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<form action="{{ url_for('login') }}" method="post">
+    {{ form.csrf_token }}
+    <div>
+        <label>{{ form.email.label }}</label>
+        {{ form.email() }}
+    </div>
+    <div>
+        <label>{{ form.password.label }}</label>
+        {{ form.password() }}
+    </div>
+    <div>
+        {{ form.submit() }}
+        <p class="login-p">If not signed up. Please sign up here <a class="login-a" href="{{ url_for('signup') }}">Sign Up</a>
+        </p>
+    </div>
+</form>
+{% endblock %}
+{% include 'footer.html' %}
