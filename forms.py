@@ -8,6 +8,7 @@ class TodoListForm(FlaskForm):
     add = SubmitField("Add Item")
 
 
+
 class SignupForm(FlaskForm):
     username = StringField("Username: ", validators=[DataRequired()])
     email = StringField("Email: ", validators=[DataRequired()])
