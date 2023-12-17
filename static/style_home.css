@@ -76,30 +76,61 @@ hr {
 /* Styling the footer */
 footer {
   background-color: #333;
-  color: white;
+  color: #fff;
   text-align: center;
-  padding: 10px;
+  padding: 30px 0;
   width: 100%;
   position: fixed;
   bottom: 0; /* Stick the footer to the bottom */
 }
-
-/* Styling the icons */
-/* Apply Font Awesome styles */
-.fa-brands:before {
-    font-family: "Font Awesome 5 Brands";
-    font-weight: 900;
-}
-
-/* Style the links */
-.brand {
-    display: inline-block;
-    margin: 0 9px;
+/* footer {
     background-color: #333;
+
+
+    text-align: center;
+} */
+
+.footer-icon {
     color: #fff;
+    font-size: 26px;
+    margin: 10px;
     text-decoration: none;
-    font-size: 25px;
+
 }
-.brand:hover{
-    color: #C8C8C8;
+
+.fa-brands{
+    transition: color 0.3s ease;
+}
+
+.fa-facebook:hover {
+    color: #007bff;
+}
+
+.fa-instagram:hover{
+    color: #f83376;
+}
+
+.fa-twitter:hover{
+    color: #2f9aea;
+}
+
+.fa-snapchat:hover{
+    color: #fffb00;
+}
+
+
+.footer-heading {
+    margin-top: 15px;
+    margin-bottom: 0;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 23px;
+    letter-spacing: 1px;
+}
+
+.footer-subheading {
+    margin-top: 13px;
+    font-size: 18px;
+    font-weight: 300;
+    opacity: 0.8;
+    font-family: 'Bricolage Grotesque', sans-serif;
 }
