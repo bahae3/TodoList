@@ -1,7 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Integer, String
-from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy.exc import NoResultFound
 from forms import TodoListForm, SignupForm, LoginForm, ContactForm
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 from datetime import datetime
@@ -24,28 +23,35 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one()
+    return User.query.get(user_id)
 
 
 # Creating users table
 class User(db.Model, UserMixin):
     __tablename__ = "user"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    username: Mapped[str] = mapped_column(String, nullable=False)
-    email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
-    password: Mapped[str] = mapped_column(String, nullable=False)
-    lists = relationship("TodoList")
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, nullable=False, unique=True)
+    password = db.Column(db.String, nullable=False)
+    lists = db.relationship("TodoList", backref="user", lazy=True)
+
+    def __init__(self, username, email, password):
+        self.username = username
+        self.email = email
+        self.password = password
 
 
 # Creating To do List table
 class TodoList(db.Model):
     __tablename__ = "list"
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user_list1: Mapped[str] = mapped_column(String, nullable=False)
-    user_list2: Mapped[str] = mapped_column(String, nullable=False)
-    user_list3: Mapped[str] = mapped_column(String, nullable=False)
-    user_list4: Mapped[str] = mapped_column(String, nullable=False)
+    item = db.Column(db.String, nullable=False)
+
+    def __init__(self, user_id, item):
+        self.user_id = user_id
+        self.item = item
 
 
 with app.app_context():
@@ -62,8 +68,8 @@ def home():
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
     form = SignupForm()
-    # if form.validate_on_submit():
-    if request.method == "POST":
+    if form.validate_on_submit():
+        # if request.method == "POST":
         new_user = User(
             username=request.form['username'],
             email=request.form['email'],
@@ -78,13 +84,13 @@ def signup():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    # if form.validate_on_submit():
-    if request.method == "POST":
+    if form.validate_on_submit():
+        # if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
         # Changed this 👇
-        # existing_user = User.query.filter_by(email=email).first()
-        existing_user = db.session.execute(db.select(User).filter_by(email=email)).scalar_one()
+        existing_user = User.query.filter_by(email=email).first()
+        # existing_user = db.session.execute(db.select(User).filter_by(email=email)).scalar_one()
         if existing_user:
             if existing_user.password == password:
                 login_user(existing_user)
@@ -101,51 +107,35 @@ def login():
 @app.route("/todo", methods=['GET', 'POST'])
 @login_required
 def todo():
-    # user_list_db = TodoList.query.filter_by(user_id=current_user.id).first()
-    user_list_db = db.session.execute(db.select(TodoList).filter_by(user_id=current_user)).scalar_one()
-    if user_list_db:
-        return redirect(url_for("success"))
+    # Fetching items for a specific user ID as a list
+    items = [item[0].capitalize() for item in
+             TodoList.query.filter_by(user_id=current_user.id).with_entities(TodoList.item).all()]
+    length_items_list = len(items)
+
     form = TodoListForm()
-    # if form.validate_on_submit():
-    if request.method == "POST":
-        user_list = request.form["todo_list"]
-        user_list_split = user_list.split(", ")
-        all_the_list = []
-        for i in user_list_split:
-            all_the_list.append(i)
-        new_list = TodoList(
-            user_id=current_user.id,
-            user_list1=all_the_list[0],
-            user_list2=all_the_list[1],
-            user_list3=all_the_list[2],
-            user_list4=all_the_list[3],
-        )
-        db.session.add(new_list)
+    if form.validate_on_submit():
+        user_typed_item = request.form["todo_list"].capitalize()
+        new_todo = TodoList(user_id=current_user.id, item=user_typed_item)
+        db.session.add(new_todo)
         db.session.commit()
-        return redirect(url_for("success"))
-    return render_template("todo.html", form=form, current_user=current_user, year=date.year)
+        return redirect(url_for("todo"))
+    return render_template("todo.html", form=form, current_user=current_user, year=date.year, items=items,
+                           len=length_items_list)
 
 
 @app.route("/success")
 @login_required
 def success():
-    all_of_the_list = db.session.execute(db.select(TodoList).filter_by(user_id=current_user)).scalar_one()
-    # all_of_the_list = TodoList.query.filter_by(user_id=current_user.id).first()
-    if not all_of_the_list:
-        listed_todo_items = []
-    else:
-        listed_todo_items = [all_of_the_list.user_list1.capitalize(),
-                             all_of_the_list.user_list2.capitalize(),
-                             all_of_the_list.user_list3.capitalize(),
-                             all_of_the_list.user_list4.capitalize()]
+    items = [item[0].capitalize() for item in
+             TodoList.query.filter_by(user_id=current_user.id).with_entities(TodoList.item).all()]
     return render_template("success.html", current_user=current_user, date=date.strftime("%A, %d %B"), year=date.year,
-                           list=listed_todo_items)
+                           items=items)
 
 
 @app.route("/update/<int:user_id_list>", methods=['GET', 'POST'])
 def update(user_id_list):
-    list_to_delete = db.session.execute(db.select(TodoList).filter_by(user_id=user_id_list)).scalar_one()
-    # list_to_delete = TodoList.query.filter_by(user_id=user_id_list).first()
+    # list_to_delete = db.session.execute(db.select(TodoList).filter_by(user_id=user_id_list)).scalar_one()
+    list_to_delete = TodoList.query.filter_by(user_id=user_id_list).first()
     db.session.delete(list_to_delete)
     db.session.commit()
     return redirect(url_for("todo"))
@@ -153,10 +143,19 @@ def update(user_id_list):
 
 @app.route("/delete/<int:user_id_list>", methods=['GET', 'POST'])
 def delete(user_id_list):
-    list_to_delete = db.session.execute(db.select(TodoList).filter_by(user_id=user_id_list)).scalar_one()
-    # list_to_delete = TodoList.query.filter_by(user_id=user_id_list).first()
-    db.session.delete(list_to_delete)
+    TodoList.query.filter_by(user_id=user_id_list).delete()
     db.session.commit()
+    return redirect(url_for("success"))
+
+
+@app.route("/delete_item/<string:item_to_delete>", methods=['GET', 'POST'])
+def delete_item(item_to_delete):
+    try:
+        item_to_be_deleted = TodoList.query.filter_by(item=item_to_delete).one()
+        db.session.delete(item_to_be_deleted)
+        db.session.commit()
+    except NoResultFound:
+        flash("Item not found or already deleted!', 'error")
     return redirect(url_for("success"))
 
 
