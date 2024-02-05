@@ -32,8 +32,9 @@ li, .success-p {
     font-size: 24px;
 }
 
-.success-update,
-.success-delete {
+.success-delete, .success-add {
+  display: inline-block;
+  width: auto;
     margin: 5px auto;
     padding: 15px 25px;
     background-color: #007bff;
@@ -42,16 +43,36 @@ li, .success-p {
     border-radius: 5px;
     width: 140px;
     text-align: center;
+    transition: background-color 0.3s ease;
 }
 
+
 /* Hover effect */
-.success-update:hover,
-.success-delete:hover{
+.success-add:hover{
     background-color: #0056b3;
+}
+.success-delete:hover{
+  background-color: red;
 }
 
 /* Active effect (when clicked) */
-.success-update:active,
-.success-delete:active {
+.success-delete:active, .success-add:active {
     background-color: #003a80;
+}
+
+/* New anchor tags near each item */
+.item-container{
+    margin-left: 6px;
+    display: inline;
+}
+
+.delete-item{
+    margin: 0 4px 0 0;
+    font-size: 14px;
+    color: #333888;
+}
+
+.delete-item:hover{
+  color: red;
+  text-decoration: none;
 }
