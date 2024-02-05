@@ -4,8 +4,8 @@ from wtforms.validators import DataRequired
 
 
 class TodoListForm(FlaskForm):
-    todo_list = StringField("Your list: ", validators=[DataRequired()])
-    submit = SubmitField("Submit")
+    todo_list = StringField("Type an item: ", validators=[DataRequired()])
+    add = SubmitField("Add Item")
 
 
 class SignupForm(FlaskForm):
