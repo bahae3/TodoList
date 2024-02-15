@@ -9,10 +9,12 @@
     <link rel="stylesheet" href="static/style_success.css">
     <link rel="stylesheet" href="static/style_contact.css">
     <link rel="stylesheet" href="static/style_aboutus.css">
+
+    <!--The favicon photo-->
     <link rel="icon" href="{{ url_for('static', filename='todo.ico') }}">
 
     <script src="https://kit.fontawesome.com/a7aad111ea.js" crossorigin="anonymous"></script>
-    <title>{% block title %}{% endblock %}</title>
+    <title>{{ title }}</title>
 </head>
 <body>
 <div class="navbar">
@@ -28,5 +30,3 @@
     <a href="{{ url_for('aboutus') }}">About Us</a>
     {% endif %}
 </div>
-{% block body %}
-{% endblock %}
