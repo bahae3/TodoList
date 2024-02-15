@@ -148,7 +148,6 @@ def delete(user_id_list):
     return redirect(url_for("success"))
 
 
-
 @app.route("/delete_item/<string:item_to_delete>", methods=['GET', 'POST'])
 def delete_item(item_to_delete):
     try:
