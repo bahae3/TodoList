@@ -1,6 +1,6 @@
-{% extends 'header.html' %}
-{% block title %}Todo List{% endblock %}
-{% block body %}
+{% set title="Todo App - Todo list" %}
+{% include 'header.html' %}
+
 <h1 class="todo-title">Type your TODO List items</h1>
 <form method="post" action="{{ url_for('todo') }}">
     {{ form.csrf_token }}
@@ -29,5 +29,5 @@
     {% endfor %}
 </p>
 
-{% endblock %}
+
 {% include 'footer.html' %}

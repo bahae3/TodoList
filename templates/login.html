@@ -1,6 +1,6 @@
-{% extends 'header.html' %}
-{% block title %}Log In{% endblock %}
-{% block body %}
+{% set title="Todo App - Log in" %}
+{% include 'header.html' %}
+
 <h1 class="login-title">Log In</h1>
 {% with messages = get_flashed_messages() %}
 {% if messages %}
@@ -25,5 +25,5 @@
         </p>
     </div>
 </form>
-{% endblock %}
+
 {% include 'footer.html' %}
