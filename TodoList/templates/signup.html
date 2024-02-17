@@ -1,6 +1,6 @@
-{% extends 'header.html' %}
-{% block title %}Sign In{% endblock %}
-{% block body %}
+{% set title="Todo App - Sign up" %}
+{% include 'header.html' %}
+
 <p class="login-prompt">You should sign in first. Already have an account?</p>
 <div class="login-link"><a href="{{ url_for('login') }}" >Login here</a></div>
 <p class="login-prompt-or">or</p>
@@ -23,5 +23,5 @@
         {{ form.submit() }}
     </div>
 </form>
-{% endblock %}
+
 {% include 'footer.html' %}

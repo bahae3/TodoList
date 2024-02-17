@@ -1,6 +1,6 @@
-{% extends 'header.html' %}
-{% block title %}Your list{% endblock %}
-{% block body %}
+{% set title="Todo App - Your list" %}
+{% include 'header.html' %}
+
 <h1 class="success-h1">Here is your TODO List for today: <span class="success-span">{{ date }}</span></h1>
 <hr>
 {% if items %}
@@ -28,6 +28,4 @@ The user who will check the item if it is done, and if not, it will be the cross
 <a class="success-add" href="{{ url_for('todo') }}">Create a new list</a>
 {% endif %}
 
-
-{% endblock %}
 {% include 'footer.html' %}
